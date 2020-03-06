@@ -4,41 +4,21 @@
 # you can delete this line if you're not using Docker
 # image: busybox:latest
 
-stages: 
-  - validate
-  - deploy_minio
-  - deploy_master
+# stages: 
+#  - kube_deploy
+#   - get_kubeconfig
+#   - deploy_master
   
 
-validate:
-  stage: validate
+kube_deploy:
   script:
-    - sh infra-deploy.sh validate
+    - kubectl --insecure-skip-tls-verify apply -f KubernetesDeployments/videoapp-deploy.yaml
+    - kubectl --insecure-skip-tls-verify apply -f KubernetesDeployments/videoapp-svc.yaml
+    - kubectl --insecure-skip-tls-verify get svc 
+    - kubectl --insecure-skip-tls-verify get pods
   only:
     refs:
-      - master
-  tags:
-    - docker
-    - terraform
-
-deploy_minio:
-  stage: deploy_minio
-  script:
-    - sh infra-deploy.sh deploy minio
-  only:
-    refs:
-      - master
-  tags:
-    - docker
-    - terraform
-
-deploy_master:
-  stage: deploy_master
-  script:
-    - sh infra-deploy.sh deploy master
-  only:
-    refs:
-      - master
+    - Kube-deploy
   tags:
     - docker
     - terraform
