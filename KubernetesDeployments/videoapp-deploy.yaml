@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: videoapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: videoapp
+  template:
+    metadata:
+      name: videoapp
+      labels:
+        app: videoapp
+    spec:
+      containers:
+      - name: videoapp
+        image: arnabdnandy1706/django-video-app:latest
+        ports:
+        - name: videoapp
+          containerPort: 8000
